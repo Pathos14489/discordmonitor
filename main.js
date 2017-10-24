@@ -52,6 +52,26 @@ function createAddBotWindow(){
     });
 };
 
+
+function createTokenWindow(){
+    createTokenWindow = new BrowserWindow({
+        width: 400,
+        height: 150,
+        title: 'Monitor a Token',
+        resizable: false
+    });
+    // Load HTML into window
+    createTokenWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'tokenWindow.html'),
+        protocol: 'file:',
+        slashes: true
+    }));
+    // Garbage Collection
+    createTokenWindow.on('closed', function(){
+        createTokenWindow = null;
+    });
+};
+
 ipcMain.on('bot:add', function(e, botLocation){
     console.log("Okay. Step two.")
     mainWindow.webContents.send('bot:add', botLocation);
