@@ -78,8 +78,8 @@ ipcMain.on('bot:add', function(e, botLocation){
     addBotWindow.close();
 });
 ipcMain.on('token:add', function(e, token){
-    mainWindow.webContents.send('bot:add', token);
-    addBotWindow.close();
+    mainWindow.webContents.send('token:add', token);
+    tokenWindow.close();
 });
 
 // menu

@@ -172,15 +172,11 @@
             setTimeout(botIsON,4000)
         });
 
-        tokenLogon(token){
-            bot.login(token);
-        };
-
-        ipcRenderer.on('token:add', function(e, token){
+        ipcRenderer.on('token:add', function(token){
             const script = document.createElement('script');
-            script.src = "./tokenMonitor.js";
+            script.src = "tokenMonitor.js";
             head.appendChild(script)
-            setTimeout(tokenLogon(token), 3000)
+            setTimeout(bot.login(token), 3000)
             setTimeout(botIsON,5000)
         });
 
