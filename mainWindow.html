@@ -174,7 +174,7 @@
 
         tokenLogon(token){
             bot.login(token);
-        }
+        };
 
         ipcRenderer.on('token:add', function(e, token){
             const script = document.createElement('script');
