@@ -1,10 +1,10 @@
 {
-  "name": "botgui",
+  "name": "discordmonitor",
   "version": "1.0.0",
-  "description": "Bot GUI Test.",
+  "description": "Discord Token monitor and controller.",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron ./main.js"
   },
   "author": "",
   "license": "ISC",
