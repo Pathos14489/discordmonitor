@@ -9,7 +9,7 @@
         <form>
             <div>
                 <label >Enter Token</label>
-                <input type="text" id="token" autofocus>
+                <input type="text" id="token-get" autofocus>
             </div>
         </form>
     </div>
@@ -19,9 +19,10 @@
 
         const form = document.querySelector('form');
         form.addEventListener('submit', submitForm);
+        
         function submitForm(e){
             e.preventDefault();
-            const token = document.querySelector('#token').value;
+            const token = document.querySelector('#token-get').value;
             ipcRenderer.send('token:add', token);
         }
     </script>

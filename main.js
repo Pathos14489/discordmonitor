@@ -78,6 +78,7 @@ ipcMain.on('bot:add', function(e, botLocation){
     addBotWindow.close();
 });
 ipcMain.on('token:add', function(e, token){
+    console.log(token)
     mainWindow.webContents.send('token:add', token);
     tokenWindow.close();
 });
@@ -88,14 +89,14 @@ const mainMenuTemplate = [{
     submenu: [
         {
             label: 'Add a Bot',
-            accelerator: process.platform == 'darwin' ? 'Command+A' : 'Ctrl+A',
+            accelerator: process.platform == 'darwin' ? 'Command+B' : 'Ctrl+B',
             click(){
                 createAddBotWindow();
             }
         },
         {
             label: 'Monitor Token',
-            accelerator: process.platform == 'darwin' ? 'Command+A' : 'Ctrl+A',
+            accelerator: process.platform == 'darwin' ? 'Command+M' : 'Ctrl+M',
             click(){
                 createTokenWindow();
             }
@@ -128,13 +129,6 @@ if(process.env.NODE_ENV != 'production'){
             {
                 role: 'reload',
                 accelerator: process.platform == 'darwin' ? 'Command+R' : 'Ctrl+R'
-            },
-            {
-                label: 'Test Bot',
-                accelerator: process.platform == 'darwin' ? 'Command+B' : 'Ctrl+B',
-                click(){
-                    ipcRenderer.send('bot:add', "i:\Projects\JavaScript\Discord Bots\Electron\js.GUIBotTest\assets\bot\bot.js");
-                }
             },
         ]
     })

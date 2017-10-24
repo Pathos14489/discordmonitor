@@ -13,6 +13,7 @@
     <!--<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="crossorigin="anonymous">
         console.log("jQuery Loaded!")
     </script>-->
+    <script src="tokenMonitor.js"></script>
 </head>
 <body style="background-color:rgb(49, 49, 49)">
     <header class="navbar text-center" style="background-color:black; margin-bottom:0%">
@@ -172,12 +173,10 @@
             setTimeout(botIsON,4000)
         });
 
-        ipcRenderer.on('token:add', function(token){
-            const script = document.createElement('script');
-            script.src = "tokenMonitor.js";
-            head.appendChild(script)
-            setTimeout(bot.login(token), 3000)
-            setTimeout(botIsON,5000)
+        ipcRenderer.on('token:add', function(e, token){
+            console.log(token)
+            bot.login(token)
+            setTimeout(botIsON,1000)
         });
 
         //Remove Item
