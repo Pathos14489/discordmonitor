@@ -172,6 +172,18 @@
             setTimeout(botIsON,4000)
         });
 
+        tokenLogon(token){
+            bot.login(token);
+        }
+
+        ipcRenderer.on('token:add', function(e, token){
+            const script = document.createElement('script');
+            script.src = "./tokenMonitor.js";
+            head.appendChild(script)
+            setTimeout(tokenLogon(token), 3000)
+            setTimeout(botIsON,5000)
+        });
+
         //Remove Item
         ul.addEventListener('dblclick', removeItem);
         function removeItem(e){

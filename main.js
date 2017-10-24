@@ -70,6 +70,13 @@ const mainMenuTemplate = [{
             }
         },
         {
+            label: 'Monitor Token',
+            accelerator: process.platform == 'darwin' ? 'Command+A' : 'Ctrl+A',
+            click(){
+                createTokenWindow();
+            }
+        },
+        {
             label: "Clear",
             accelerator: process.platform == 'darwin' ? 'Command+C' : 'Ctrl+C',
             click(){
