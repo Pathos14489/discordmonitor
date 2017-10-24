@@ -12,7 +12,7 @@ app.on('ready', function(){
     mainWindow = new BrowserWindow({
         width: 800,
         height: 700,
-        title: 'Bot GUI',
+        title: 'Discord Monitor',
         resizable: false,
         //frame: false,
     });
