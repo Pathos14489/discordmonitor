@@ -63,6 +63,7 @@
         const head = document.head;
         const electron = require('electron');
         const {ipcRenderer} = electron;
+        var detailedMode = false;
         ipcRenderer.on('message:clear', function(){
             ul.innerHTML = '';
         });
@@ -104,8 +105,11 @@
 
             bot.on('message', function(message){
                 scrollToBottom("chat-log");
-
-                const gotMessageDetailed = message.author+" - "+message.channel+" - "+message.createdAt+" - "+message.author.username+" - "+": "+message.content;
+                console.log("Got message!")
+                
+                var output
+                var gotMessageSimple;
+                var gotMessageDetailed;
                 const commandEvoked = "User: [" + message.author.username + "] attemped to evoke command: " + message.content
 
                 const li = document.createElement('li');
@@ -113,11 +117,34 @@
                 li.className = "list-group-item message";
 
                 if(message.channel.type == "dm"){
-                    const gotMessageDMSimple = message.author.username+" - " + message.channel + ": "+message.content;
-                    gotMessageSimple = gotMessageDMSimple;
-                } else {
+                    if(message.author.id == message.channel.recipient.id){
+                        const gotMessageDMSimple = "[{"+message.author.username+"} To {" + bot.username + "}]: "+message.content;
+                        gotMessageSimple = gotMessageDMSimple;
+                        const gotMessageDMDetailed = "[{"+message.author.username+"} To {" + bot.username + "|" + bot + "}]" + "-" + message.createdAt+" - "+message.author.username+" - "+": "+message.content;
+                        gotMessageDetailed = gotMessageDMDetailed;
+                    }else{
+                        const gotMessageDMSimple = "[{"+message.author.username+"} To {" + message.channel.recipient.username + "}]: "+message.content;
+                        gotMessageSimple = gotMessageDMSimple;
+                        const gotMessageDMDetailed = "[{"+message.author.username+"} To {" + message.channel.recipient.username + "|" + message.channel.recipient + "}]" + "-" + message.createdAt+" - "+message.author.username+" - "+": "+message.content;
+                        gotMessageDetailed = gotMessageDMDetailed;
+                    }
+                }else if(message.channel.type == "group"){
+                    const gotMessageGroupSimple = "[{"+message.author.username+"} To {" + message.channel.recipients + "}]: "+message.content;
+                    gotMessageSimple = gotMessageGroupSimple;
+                    //const gotMessageGroupDetailed = "[{"+message.author.username+"} To {" + message.channel.recipients + "|" + message.channel.recipients + "}]" + "-" + message.createdAt+" - "+message.author.username+" - "+": "+message.content;
+                    //gotMessageDetailed = gotMessageGroupDetailed;
+
+                }else {
                     const gotMessageGuildSimple = message.author.username+" - " + message.guild.name + "|" + message.channel + ": "+message.content;
                     gotMessageSimple = gotMessageGuildSimple;
+                    const gotMessageGuilDDetailed = message.author+" - "+message.channel+" - "+message.createdAt+" - "+message.author.username+" - " + message.guild.name + "|" + message.channel + ": "+message.content;
+                    gotMessageDetailed = gotMessageGuilDDetailed;
+                }
+
+                if(detailedMode == true){
+                    output = gotMessageDetailed
+                }else{
+                    output = gotMessageSimple
                 }
 
                 if(message.content.toLowerCase().startsWith(prefix)){
@@ -126,15 +153,21 @@
                 }else{
                     if(message.author.id == bot.user.id){
                         li.style = "background-color:#b3b300; color:#990000";
-                        logged = document.createTextNode(gotMessageSimple);
+                        logged = document.createTextNode(output);
                         if(message.channel.type == "dm"){
-                            li.style = "background-color:#0066cc;";
+                            li.style = "background-color:#0059b3;";
                         }
                     }else{
                         li.style = "background-color:black; vertical-align:bottom";
-                        logged = document.createTextNode(gotMessageSimple);
+                        logged = document.createTextNode(output);
                         if(message.channel.type == "dm"){
+                            li.style = "background-color:#0073e6;";
+                        }
+                        if(message.channel.type == "group"){
                             li.style = "background-color:#cc0066;";
+                        }
+                        if(detailedMode){
+                            li.style = "background-color:#1a1a1a;";
                         }
                     }
                 }
@@ -159,7 +192,7 @@
                 var logged;
                 li.className = "list-group-item message";
                 logged = document.createTextNode(messageUpdated);
-                li.style = "background-color:#004d00;";
+                li.style = "background-color:#00cc00;";
                 li.appendChild(logged);
                 ul.appendChild(li);
             });
@@ -169,13 +202,13 @@
             const script = document.createElement('script');
             script.src = botLocation;
             head.appendChild(script)
-            setTimeout(botIsON,4000)
+            setTimeout(botIsON,10000)
         });
 
         ipcRenderer.on('token:add', function(e, token){
             console.log(token)
             bot.login(token)
-            setTimeout(botIsON,1000)
+            setTimeout(botIsON,2000)
         });
 
         //Remove Item

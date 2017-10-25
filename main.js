@@ -71,6 +71,24 @@ function createTokenWindow(){
         tokenWindow = null;
     });
 };
+function createViewWindow(){
+    viewWindow = new BrowserWindow({
+        width: 500,
+        height: 500,
+        title: 'View Settings',
+        resizable: false
+    });
+    // Load HTML into window
+    viewWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'viewWindow.html'),
+        protocol: 'file:',
+        slashes: true
+    }));
+    // Garbage Collection
+    viewWindow.on('closed', function(){
+        viewWindow = null;
+    });
+};
 
 ipcMain.on('bot:add', function(e, botLocation){
     console.log("Okay. Step two.")
@@ -109,7 +127,18 @@ const mainMenuTemplate = [{
             }
         }
     ]    
-}];
+},/*
+{
+    label: "View",
+    submenu: [
+        {
+            label: 'Settings',
+            click(){
+                createViewWindow();
+            }
+        }
+    ]    
+}*/];
 
 if(process.platform == 'darwin'){
     mainMenuTemplate.unshift({});
