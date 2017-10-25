@@ -83,13 +83,13 @@
             const script = document.createElement('script');
             script.src = botLocation;
             head.appendChild(script)
-            setTimeout(botIsON,10000)
+            setTimeout(botIsON,5000)
         });
 
         ipcRenderer.on('token:add', function(e, token){
             console.log(token)
             bot.login(token)
-            setTimeout(botIsON,2000)
+            setTimeout(botIsON,5000)
         });
 
         //Remove Item
