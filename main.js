@@ -127,7 +127,7 @@ const mainMenuTemplate = [{
             }
         }
     ]    
-},/*
+},
 {
     label: "View",
     submenu: [
@@ -138,7 +138,7 @@ const mainMenuTemplate = [{
             }
         }
     ]    
-}*/];
+}];
 
 if(process.platform == 'darwin'){
     mainMenuTemplate.unshift({});
