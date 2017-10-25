@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Monitor a Token</title>
+    <title>Add a Bot</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container">
-        <form>
-            <div>
-                <label >Enter Token</label>
-                <input type="text" id="token-get" autofocus>
+        <form class="form-inline">
+            <div class="container">
+                <label class="btn btn-default">Select a Bot.js File<input type="file" id="botLocation"></label>
+                <input type="submit" value="Select" name="submit" class="btn btn-default">
             </div>
         </form>
     </div>
@@ -19,11 +19,10 @@
 
         const form = document.querySelector('form');
         form.addEventListener('submit', submitForm);
-        
         function submitForm(e){
             e.preventDefault();
-            const token = document.querySelector('#token-get').value;
-            ipcRenderer.send('token:add', token);
+            const botLocation = document.getElementsByTagName('input')[0].files[0].path
+            ipcRenderer.send('bot:add', botLocation);
         }
     </script>
 </body>

@@ -18,7 +18,7 @@ app.on('ready', function(){
     });
     // Load HTML into window
     mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'mainWindow.html'),
+        pathname: path.join(__dirname, './html/mainWindow.html'),
         protocol: 'file:',
         slashes: true
     }));
@@ -42,7 +42,7 @@ function createAddBotWindow(){
     });
     // Load HTML into window
     addBotWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'addBot.html'),
+        pathname: path.join(__dirname, './html/addBot.html'),
         protocol: 'file:',
         slashes: true
     }));
@@ -55,14 +55,14 @@ function createAddBotWindow(){
 
 function createTokenWindow(){
     tokenWindow = new BrowserWindow({
-        width: 400,
-        height: 150,
+        width: 315,
+        height: 90,
         title: 'Monitor a Token',
         resizable: false
     });
     // Load HTML into window
     tokenWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'tokenWindow.html'),
+        pathname: path.join(__dirname, './html/tokenWindow.html'),
         protocol: 'file:',
         slashes: true
     }));
@@ -80,7 +80,7 @@ function createViewWindow(){
     });
     // Load HTML into window
     viewWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'viewWindow.html'),
+        pathname: path.join(__dirname, './html/viewWindow.html'),
         protocol: 'file:',
         slashes: true
     }));
