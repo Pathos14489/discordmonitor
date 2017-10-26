@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height:100%">
 <head id="header">
     <title>Token Client</title>
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css"> -->
@@ -15,33 +15,32 @@
     </script>-->
     <script src="./../js/tokenMonitor.js"></script>
 </head>
-<body style="background-color:rgb(49, 49, 49)">
-    <header class="navbar text-center" style="background-color:black; margin-bottom:0%">
-        <h1 style="color:lightgrey" id="name">
-        </h1>
+<body style="background-color:rgb(49, 49, 49); height:100%">
+    <header class="navbar text-center" style="background-color:black; margin-bottom:0%; height:10%; max-height:10%">
+        <h1 style="color:lightgrey" id="name"></h1>
     </header>
-    <div>
-        <div id="info" style="background-color:grey; color:white">
-            <div id="bot-info1">
-                test
-            </div>
-            <div id="bot-info2">
-                dsa
-            </div>
-            <div id="bot-info3">
-                gfd
-            </div>
-            <div id="bot-info4">
-                vcx
-            </div>
+    <div id="info" style="background-color:grey; color:white; height:10%; max-height:10%">
+        <div id="bot-info1">
+            test
         </div>
-        <div>
-            <div class="container col-sm-10" style="padding-left:0%; padding-right:0%">
-                <div style="height:66.5vh; overflow-y:auto; background-color:rgb(41, 41, 41); color:white; padding-left:0%; padding-right:0%" id="chat-log">
-                    <ul class="list-group bottom-right" id="messages" style="vertical-align:bottom; padding-left:0%; padding-right:0%"></ul>
+        <div id="bot-info2">
+            dsa
+        </div>
+        <div id="bot-info3">
+            gfd
+        </div>
+        <div id="bot-info4">
+            vcx
+        </div>
+    </div>
+    <div style="height:76%; max-height:76%">
+        <div style="height:100%">
+            <div class="container col-sm-10" style="padding-left:0%; padding-right:0%; height:100%; max-height:100%">
+                <div style="position: absolute; height:100%; width:100%; max-height:100%; overflow-y:auto; background-color:rgb(41, 41, 41); color:white; padding-left:0%; padding-right:0%" id="chat-log">
+                    <ul class="list-group" id="messages" style="vertical-align:bottom; padding-left:0%; padding-right:0%"></ul>
                 </div>
             </div>
-            <div class="col-sm-2" style="height:66.5vh; background-color:white; border-left: thick double black;">
+            <div class="col-sm-2" style="height:100%; background-color:white; border-left: thick double black;">
                 <nav>
                     <div>
                         Hey
@@ -51,12 +50,12 @@
                     </div>
                 </nav>
             </div>
-            <footer class="navbar-fixed-bottom" style="background-color:rgb(24, 24, 24); border-top: thick double black">
-                <h1>CHATBAR</h1>
-            </footer>
         </div>
     </div>
-    
+    <footer class="navbar-fixed-bottom" style="background-color:rgb(24, 24, 24); border-top: thick double black; height:4%; max-height:4%">
+        <input type="text" id="chatbar-text-form" style="width:80%" autofocus>
+        <h1>Hey there</h3>
+    </footer>
     
     <script>
         const ul = document.querySelector('ul');
@@ -66,6 +65,35 @@
         const tools = require('./../js/tools.js');
         const {ipcRenderer} = electron;
         var detailedMode = false;
+
+        window.onerror = function(event, source, lineno, colno, error) {
+            tools.scrollToBottom("chat-log");
+            document.getElementById("name").textContent = "ERROR!"
+            const li = document.createElement('li');
+            li.className = "list-group-item message";
+            message = document.createTextNode("ERROR:"+event+"   ("+source+":"+lineno+")");
+            li.style = "background-color:#550000;";
+            const image = document.createElement('img');
+            image.src="./../assets/imgs/WARNING.png"
+            image.style="width:50px;height:50px;"
+            li.appendChild(image)
+            li.appendChild(message);
+            ul.appendChild(li);
+            if(event.includes("Cannot read property 'username' of null")){
+                tools.scrollToBottom("chat-log");
+                document.getElementById("name").textContent = "INVALID TOKEN - RESTART REQUIRED"
+                const li = document.createElement('li');
+                li.className = "list-group-item message";
+                error = document.createTextNode("INVALID TOKEN - CHECK TOKEN! RESTART OF PROGRAM REQUIRED!");
+                li.style = "background-color:#550000;";
+                const image = document.createElement('img');
+                image.src="./../assets/imgs/WARNING.png"
+                image.style="width:50px;height:50px;"
+                li.appendChild(image)
+                li.appendChild(error);
+                ul.appendChild(li);
+            }
+        }
 
         ipcRenderer.on('message:clear', function(){
             ul.innerHTML = '';
@@ -77,6 +105,10 @@
             monitorDiscord.onMessage();
             monitorDiscord.onDelete();
             monitorDiscord.onUpdate();
+        }
+        function messageSent(e){
+            e.preventDefault();
+            const token = document.querySelector('#token-get').value;
         }
 
         ipcRenderer.on('bot:add', function(e, botLocation){

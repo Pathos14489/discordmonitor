@@ -13,7 +13,7 @@ app.on('ready', function(){
         width: 800,
         height: 700,
         title: 'Discord Monitor',
-        resizable: false,
+        resizable: true,
         //frame: false,
     });
     // Load HTML into window

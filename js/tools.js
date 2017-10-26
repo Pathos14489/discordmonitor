@@ -9,7 +9,7 @@ module.exports = {
     },
     scrollToBottom: function (id) {
         var div = document.getElementById(id);
-        div.scrollTop = div.scrollHeight - div.clientHeight +10;
+        div.scrollTop = div.scrollHeight - div.clientHeight;
     },
     scrollToTop: function (id) {
         var div = document.getElementById(id);

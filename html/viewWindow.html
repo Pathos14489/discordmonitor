@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Monitor a Token</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body style="background-color:rgb(41, 41, 41); margin-top:3%">
+    <div class="container">
+        <form>
+            <div>
+                <label style=" color:white;">Enter Token</label>
+                <input type="text" id="token-get" autofocus>
+            </div>
+        </form>
+    </div>
+    <script>
+        const electron = require('electron');
+        const {ipcRenderer} = electron;
+
+        const form = document.querySelector('form');
+        form.addEventListener('submit', submitForm);
+        
+        function submitForm(e){
+            e.preventDefault();
+            const token = document.querySelector('#token-get').value;
+            ipcRenderer.send('token:add', token);
+        }
+    </script>
+</body>
+</html>
