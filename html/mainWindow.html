@@ -82,16 +82,6 @@
             if(event.includes("Cannot read property 'username' of null")){
                 tools.scrollToBottom("chat-log");
                 document.getElementById("name").textContent = "INVALID TOKEN - RESTART REQUIRED"
-                const li = document.createElement('li');
-                li.className = "list-group-item message";
-                error = document.createTextNode("INVALID TOKEN - CHECK TOKEN! RESTART OF PROGRAM REQUIRED!");
-                li.style = "background-color:#550000;";
-                const image = document.createElement('img');
-                image.src="./../assets/imgs/WARNING.png"
-                image.style="width:50px;height:50px;"
-                li.appendChild(image)
-                li.appendChild(error);
-                ul.appendChild(li);
             }
         }
 
