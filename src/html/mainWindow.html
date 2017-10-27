@@ -13,7 +13,7 @@
     <!--<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="crossorigin="anonymous">
         console.log("jQuery Loaded!")
     </script>-->
-    <script src="./../js/tokenMonitor.js"></script>
+    <script id="loaded"></script>
 </head>
 <body style="background-color:rgb(49, 49, 49); height:100%">
     <header class="navbar text-center" style="background-color:black; margin-bottom:0%; height:10%; max-height:10%">
@@ -61,69 +61,63 @@
         const ul = document.querySelector('ul');
         const head = document.head;
         const electron = require('electron');
-        const monitorDiscord = require('./../js/monitorDiscord.js');
-        const tools = require('./../js/tools.js');
+        const monitorDiscord = require('./../monitorDiscord.js');
+        const tools = require('./../tools.js');
         const {ipcRenderer} = electron;
+        var tokenReply = false;
         var detailedMode = false;
 
         window.onerror = function(event, source, lineno, colno, error) {
-            tools.scrollToBottom("chat-log");
-            document.getElementById("name").textContent = "ERROR!"
-            const li = document.createElement('li');
-            li.className = "list-group-item message";
-            message = document.createTextNode("ERROR:"+event+"   ("+source+":"+lineno+")");
-            li.style = "background-color:#550000;";
-            const image = document.createElement('img');
-            image.src="./../assets/imgs/WARNING.png"
-            image.style="width:50px;height:50px;"
-            li.appendChild(image)
-            li.appendChild(message);
-            ul.appendChild(li);
+            tools.output("ERROR:"+event+"   ("+source+":"+lineno+")", "error")
             if(event.includes("Cannot read property 'username' of null")){
-                tools.scrollToBottom("chat-log");
                 document.getElementById("name").textContent = "INVALID TOKEN - RESTART REQUIRED"
+            }else if(event.includes("bot is not defined")){
+                document.getElementById("name").textContent = "INVALID TOKEN! - RESTART REQUIRED"
             }
         }
 
         ipcRenderer.on('message:clear', function(){
             ul.innerHTML = '';
         });
+
         function botIsON(){
-            console.log("botIsON ran")
             document.getElementById("name").textContent = bot.user.username + " - GUI"
-            // Responses
-            monitorDiscord.onMessage();
-            monitorDiscord.onDelete();
-            monitorDiscord.onUpdate();
+            monitorDiscord.monitor(bot.user.username);
+            tools.output("Bot Monitoring Active!")
         }
+        function tokenMonitorOn(token){
+            tools.createBot(token);
+        }
+
+        ipcRenderer.on('bot:add', function(e, botLocation){
+            setTimeout(botIsON,5000)
+            const script = document.createElement('script');
+            script.src = botLocation;
+            tools.output("Bot.js File Loaded...")
+            head.appendChild(script)
+        });
+
+        ipcRenderer.on('token:add', function(e, token){
+            if(tokenReply == true){
+                tools.output("Using token: "+token)
+            }
+            setTimeout(tokenMonitorOn(token),5000)
+        });
+
         function messageSent(e){
             e.preventDefault();
             const token = document.querySelector('#token-get').value;
         }
-
-        ipcRenderer.on('bot:add', function(e, botLocation){
-            const script = document.createElement('script');
-            script.src = botLocation;
-            head.appendChild(script)
-            setTimeout(botIsON,5000)
-        });
-
-        ipcRenderer.on('token:add', function(e, token){
-            console.log(token)
-            bot.login(token)
-            setTimeout(botIsON,5000)
-        });
-
         //Remove Item
-        ul.addEventListener('dblclick', removeItem);
+        /*ul.addEventListener('dblclick', removeItem);
         function removeItem(e){
             e.target.remove();
             // bot.channel.fetchMessage(message.channel.lastMessageID)
-            /*if(ul.children.length == 0){                
+            if(ul.children.length == 0){                
                 ul.className = '';
-            }*/
+            }
             
-        }
+        }*/
     </script>
 </body>
 </html>
