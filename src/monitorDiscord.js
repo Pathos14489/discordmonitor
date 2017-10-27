@@ -1,4 +1,3 @@
-
 const tools = require('./tools.js');
 module.exports = {
     onMessage: function (){
@@ -44,29 +43,27 @@ module.exports = {
             }else{
                 output = gotMessageSimple
             }
-
-            if(message.content.toLowerCase().startsWith(prefix)){
-                logged = document.createTextNode(commandEvoked);
-                li.style = "background-color:#004d00;";
+            if(message.author.id == bot.user.id){
+                li.style = "background-color:#b3b300; color:#990000";
+                logged = document.createTextNode(output);
+                if(message.channel.type == "dm"){
+                    li.style = "background-color:#0059b3;";
+                }
             }else{
-                if(message.author.id == bot.user.id){
-                    li.style = "background-color:#b3b300; color:#990000";
-                    logged = document.createTextNode(output);
-                    if(message.channel.type == "dm"){
-                        li.style = "background-color:#0059b3;";
-                    }
-                }else{
-                    li.style = "background-color:black; vertical-align:bottom";
-                    logged = document.createTextNode(output);
-                    if(message.channel.type == "dm"){
-                        li.style = "background-color:#0073e6;";
-                    }
-                    if(message.channel.type == "group"){
-                        li.style = "background-color:#cc0066;";
-                    }
-                    if(detailedMode){
-                        li.style = "background-color:#1a1a1a;";
-                    }
+                li.style = "background-color:black; vertical-align:bottom";
+                logged = document.createTextNode(output);
+                if(message.channel.type == "dm"){
+                    li.style = "background-color:#0073e6;";
+                }
+                if(message.channel.type == "group"){
+                    li.style = "background-color:#cc0066;";
+                }
+                if(detailedMode){
+                    li.style = "background-color:#1a1a1a;";
+                }
+                if(message.content.toLowerCase().startsWith(prefix) && typeof prefix != "undefined"){
+                    logged = document.createTextNode(commandEvoked);
+                    li.style = "background-color:#004d00;";
                 }
             }
             li.appendChild(logged);
@@ -98,5 +95,16 @@ module.exports = {
             li.appendChild(logged);
             ul.appendChild(li);
         });
+    },
+    onReady: function(name){
+        bot.on('ready', (name) => {
+            tools.output(name+" Active", "log");
+        });
+    },
+    monitor: function (name){
+        monitorDiscord.onReady(name);
+        monitorDiscord.onMessage();
+        monitorDiscord.onDelete();
+        monitorDiscord.onUpdate();
     }
 };
