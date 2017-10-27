@@ -36,6 +36,19 @@ module.exports = {
             }
         }
     },
+    errorCheckContent: function(){
+        tools.output("ERROR:"+event+"   ("+source+":"+lineno+")", "error")
+        if(event.includes("Cannot read property 'username' of null")){
+            document.getElementById("name").textContent = "INVALID TOKEN - RESTART REQUIRED"
+        }else if(event.includes("bot is not defined")){
+            document.getElementById("name").textContent = "INVALID TOKEN! - RESTART REQUIRED"
+        }
+    },
+    errorCheck: function(event, source, lineno, colno, error){
+        window.onerror = function(event, source, lineno, colno, error) {
+            tools.errorCheckContent()
+        }
+    },
     scrollToBottom: function (id) {
         var div = document.getElementById(id);
         div.scrollTop = div.scrollHeight - div.clientHeight;
@@ -59,7 +72,7 @@ module.exports = {
         }, 500);
     },
     createBot: function (token){
-        document.getElementById("loaded").textContent = "const Discord = require('discord.js');const bot = new Discord.Client();"
+        document.getElementById("loaded").textContent = "const Discord = require('discord.js');const bot = new Discord.Client();tools.sendError();"
         tools.output("Creating bot...", "log")
         bot.login(token)   
             .then(function(){
@@ -68,4 +81,16 @@ module.exports = {
                 monitorDiscord.monitor("Token Monitor")
             });
     },
+    sendError: function(){
+        window.onerror = function(event, source, lineno, colno, error) {
+            var errObj = {
+                event,
+                source,
+                lineno,
+                colno,
+                error
+            }
+            ipcRenderer.send('error:sent', errObj);
+        }
+    }
 };

@@ -16,6 +16,8 @@
     <script>
         const electron = require('electron');
         const {ipcRenderer} = electron;
+        const tools = require('./src/tools.js');
+        tools.sendError();
 
         const form = document.querySelector('form');
         form.addEventListener('submit', submitForm);

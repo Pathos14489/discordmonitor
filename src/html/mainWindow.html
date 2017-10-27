@@ -4,22 +4,17 @@
     <title>Token Client</title>
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css"> -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <style>
-        body {
-            overflow-x: hidden;
-            overflow-y: hidden;
-        }
-    </style>
+    <link rel="stylesheet" href="./css/mainWindow.css">
     <!--<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="crossorigin="anonymous">
         console.log("jQuery Loaded!")
     </script>-->
     <script id="loaded"></script>
 </head>
-<body style="background-color:rgb(49, 49, 49); height:100%">
-    <header class="navbar text-center" style="background-color:black; margin-bottom:0%; height:10%; max-height:10%">
+<body>
+    <header class="navbar text-center">
         <h1 style="color:lightgrey" id="name"></h1>
     </header>
-    <div id="info" style="background-color:grey; color:white; height:10%; max-height:10%">
+    <div id="info">
         <div id="bot-info1">
             test
         </div>
@@ -33,26 +28,20 @@
             vcx
         </div>
     </div>
-    <div style="height:76%; max-height:76%">
-        <div style="height:100%">
-            <div class="container col-sm-10" style="padding-left:0%; padding-right:0%; height:100%; max-height:100%">
-                <div style="position: absolute; height:100%; width:100%; max-height:100%; overflow-y:auto; background-color:rgb(41, 41, 41); color:white; padding-left:0%; padding-right:0%" id="chat-log">
-                    <ul class="list-group" id="messages" style="vertical-align:bottom; padding-left:0%; padding-right:0%"></ul>
-                </div>
-            </div>
-            <div class="col-sm-2" style="height:100%; background-color:white; border-left: thick double black;">
-                <nav>
-                    <div>
-                        Hey
-                    </div>
-                    <div>
-                        There
-                    </div>
-                </nav>
+    <div id="chatbox-and-control-panel">
+        <div id="chatbox" class="container col-sm-11">
+            <div id="chat-log">
+                <ul class="list-group" id="messages"></ul>
             </div>
         </div>
+        <div id="control-panel" class="col-sm-1">
+            <form>
+                <button type="toggle"><img id="power" src="./../../assets/red-button.png"></button>
+            </form>
+        </div>
     </div>
-    <footer class="navbar-fixed-bottom" style="background-color:rgb(24, 24, 24); border-top: thick double black; height:4%; max-height:4%">
+
+    <footer id="footer" class="navbar-fixed-bottom">
         <input type="text" id="chatbar-text-form" style="width:80%" autofocus>
         <h1>Hey there</h3>
     </footer>
@@ -61,26 +50,19 @@
         const ul = document.querySelector('ul');
         const head = document.head;
         const electron = require('electron');
+        const {ipcRenderer} = electron;
         const monitorDiscord = require('./../monitorDiscord.js');
         const tools = require('./../tools.js');
-        const {ipcRenderer} = electron;
         var tokenReply = false;
         var detailedMode = false;
 
-        window.onerror = function(event, source, lineno, colno, error) {
-            tools.output("ERROR:"+event+"   ("+source+":"+lineno+")", "error")
-            if(event.includes("Cannot read property 'username' of null")){
-                document.getElementById("name").textContent = "INVALID TOKEN - RESTART REQUIRED"
-            }else if(event.includes("bot is not defined")){
-                document.getElementById("name").textContent = "INVALID TOKEN! - RESTART REQUIRED"
-            }
-        }
+        tools.errorCheck()
 
         ipcRenderer.on('message:clear', function(){
             ul.innerHTML = '';
         });
 
-        function botIsON(){
+        function botActivate(){
             document.getElementById("name").textContent = bot.user.username + " - GUI"
             monitorDiscord.monitor(bot.user.username);
             tools.output("Bot Monitoring Active!")
@@ -90,11 +72,13 @@
         }
 
         ipcRenderer.on('bot:add', function(e, botLocation){
-            setTimeout(botIsON,5000)
             const script = document.createElement('script');
             script.src = botLocation;
             tools.output("Bot.js File Loaded...")
             head.appendChild(script)
+        });
+        ipcRenderer.on('error:sent', function(e, errObj){
+            tools.output("ERROR:"+errObj.event+"   ("+errObj.source+":"+errObj.lineno+")", "error")
         });
 
         ipcRenderer.on('token:add', function(e, token){

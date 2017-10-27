@@ -95,6 +95,11 @@ ipcMain.on('bot:add', function(e, botLocation){
     mainWindow.webContents.send('bot:add', botLocation);
     addBotWindow.close();
 });
+ipcMain.on('error:sent', function(e, errObj){
+    mainWindow.webContents.send('output:log',"Okay. Step two.")
+    mainWindow.webContents.send('error:sent', errObj);
+    addBotWindow.close();
+});
 ipcMain.on('token:add', function(e, token){
     console.log(token)
     mainWindow.webContents.send('token:add', token);

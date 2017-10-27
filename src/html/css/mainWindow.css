@@ -1,0 +1,67 @@
+body {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    height:100%;
+    width:100%;
+    background-color:rgb(49, 49, 49);
+}
+header{
+    background-color:black; 
+    margin-bottom:0%; 
+    height:10%; 
+    width:100%;
+    max-height:10%
+}
+#info{
+    background-color:grey; 
+    color:white; 
+    height:10%; 
+    width:100%;
+    max-height:10%
+}
+#chatbox-and-control-panel{
+    height:76%; 
+    max-height:76%;
+    width:100%;
+}
+#chatbox{
+    padding-left:0%; 
+    padding-right:0%; 
+    height:100%; 
+    width:85%;
+    max-height:100%
+}
+#chat-log{
+    position: absolute; 
+    height:100%; 
+    width:100%; 
+    max-height:100%; 
+    overflow-y:auto; 
+    background-color:rgb(41, 41, 41); 
+    color:white; 
+    padding-left:0%;
+    padding-right:0%
+}
+#messages{
+    vertical-align:bottom; 
+    padding-left:0%; 
+    padding-right:0%
+}
+#control-panel{
+    height:100%; 
+    width:15%;
+    background-color:white; 
+    border-left: thick double black;
+}
+#power{
+    height:100%; 
+    width:100%;
+    max-width:100%; 
+    max-height:50%
+}
+#footer{
+    background-color:rgb(24, 24, 24); 
+    border-top: thick double black; 
+    height:4%; 
+    max-height:4%
+}
