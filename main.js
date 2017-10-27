@@ -18,7 +18,7 @@ app.on('ready', function(){
     });
     // Load HTML into window
     mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, './html/mainWindow.html'),
+        pathname: path.join(__dirname, './src/html/mainWindow.html'),
         protocol: 'file:',
         slashes: true
     }));
@@ -42,7 +42,7 @@ function createAddBotWindow(){
     });
     // Load HTML into window
     addBotWindow.loadURL(url.format({
-        pathname: path.join(__dirname, './html/addBot.html'),
+        pathname: path.join(__dirname, './src/html/addBot.html'),
         protocol: 'file:',
         slashes: true
     }));
@@ -62,7 +62,7 @@ function createTokenWindow(){
     });
     // Load HTML into window
     tokenWindow.loadURL(url.format({
-        pathname: path.join(__dirname, './html/tokenWindow.html'),
+        pathname: path.join(__dirname, './src/html/tokenWindow.html'),
         protocol: 'file:',
         slashes: true
     }));
@@ -80,7 +80,7 @@ function createViewWindow(){
     });
     // Load HTML into window
     viewWindow.loadURL(url.format({
-        pathname: path.join(__dirname, './html/viewWindow.html'),
+        pathname: path.join(__dirname, './src/html/viewWindow.html'),
         protocol: 'file:',
         slashes: true
     }));
