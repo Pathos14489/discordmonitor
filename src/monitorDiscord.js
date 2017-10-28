@@ -61,7 +61,7 @@ module.exports = {
                 if(detailedMode){
                     li.style = "background-color:#1a1a1a;";
                 }
-                if(message.content.toLowerCase().startsWith(prefix) && typeof prefix != "undefined"){
+                if(typeof prefix != "undefined" && message.content.toLowerCase().startsWith(prefix)){
                     logged = document.createTextNode(commandEvoked);
                     li.style = "background-color:#004d00;";
                 }

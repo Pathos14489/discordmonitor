@@ -35,9 +35,7 @@
             </div>
         </div>
         <div id="control-panel" class="col-sm-1">
-            <form>
-                <button type="toggle"><img id="power" src="./../../assets/red-button.png"></button>
-            </form>
+            <button onclick="toggle();"><img id="power" src="./../../assets/red-button.png"></button>
         </div>
     </div>
 
@@ -53,45 +51,91 @@
         const {ipcRenderer} = electron;
         const monitorDiscord = require('./../monitorDiscord.js');
         const tools = require('./../tools.js');
+
+        var loginToken;
+        var botType;
+        var toggleOn = false;
         var tokenReply = false;
         var detailedMode = false;
+        // document.getElementById("loaded").src;
+
+
+        function toggle(){
+            if(toggleOn == true){
+                bot.destroy()
+                if(botType == "token"){
+                    document.getElementById("loaded").textContent = ""
+                }else{
+                    document.getElementById("loaded").src = "";
+                }
+                document.getElementById("power").src = "./../../assets/red-button.png"
+                toggleOn = false;
+                botType = "";
+                loginToken = ""
+                document.getElementById("name").textContent = "Bot Disconnected"
+                tools.output("Turning Off Bot...")
+            }else{
+                botActivate();
+                document.getElementById("power").src = ""
+                toggleOn = true;
+                tools.output("Turning On Bot...")
+            }
+        }
 
         tools.errorCheck()
-
         ipcRenderer.on('message:clear', function(){
             ul.innerHTML = '';
         });
 
         function botActivate(){
-            document.getElementById("name").textContent = bot.user.username + " - GUI"
-            monitorDiscord.monitor(bot.user.username);
-            tools.output("Bot Monitoring Active!")
+            if(botType == "token"){
+                document.getElementById("loaded").textContent = "const Discord = require('discord.js');const bot = new Discord.Client();tools.sendError();"
+                tools.output("Creating bot...", "log")
+                tools.output("Token Monitor Active — Bot logged in!", "log")
+            }else{
+                tools.output("Bot Monitoring Active!")
+            }
+            bot.login(loginToken).then(function(){
+                document.getElementById("name").textContent = bot.user.username
+                if(botType == "token"){
+                    monitorDiscord.monitor("Token Monitor")
+                }else{
+                    monitorDiscord.monitor(bot.user.username);
+                }
+            })
         }
-        function tokenMonitorOn(token){
-            tools.createBot(token);
+        function getToken(token){
+            loginToken = token;
+        };
+
+        function botJSLoad(botLocation){
+            document.getElementById("loaded").src = botLocation;
         }
 
         ipcRenderer.on('bot:add', function(e, botLocation){
-            const script = document.createElement('script');
-            script.src = botLocation;
             tools.output("Bot.js File Loaded...")
-            head.appendChild(script)
-        });
-        ipcRenderer.on('error:sent', function(e, errObj){
-            tools.output("ERROR:"+errObj.event+"   ("+errObj.source+":"+errObj.lineno+")", "error")
+            botType = "jsFile"
+            botJSLoad(botLocation);
         });
 
         ipcRenderer.on('token:add', function(e, token){
             if(tokenReply == true){
                 tools.output("Using token: "+token)
             }
-            setTimeout(tokenMonitorOn(token),5000)
+            botType = "token"
+            getToken(token);
         });
 
-        function messageSent(e){
+
+
+        ipcRenderer.on('error:sent', function(e, errObj){
+            tools.output("ERROR:"+errObj.event+"   ("+errObj.source+":"+errObj.lineno+")", "error")
+        });
+
+        /*function messageSent(e){
             e.preventDefault();
             const token = document.querySelector('#token-get').value;
-        }
+        }*/
         //Remove Item
         /*ul.addEventListener('dblclick', removeItem);
         function removeItem(e){

@@ -36,17 +36,21 @@ module.exports = {
             }
         }
     },
-    errorCheckContent: function(){
-        tools.output("ERROR:"+event+"   ("+source+":"+lineno+")", "error")
+    errorCheckContent: function(event, source, lineno, colno, error){
+        if(typeof source == "undefined"){
+            tools.output("ERROR:"+event+": SOURCE UNDEFINED!", "error")
+        }else{
+            tools.output("ERROR:"+event+"   ("+source+":"+lineno+")", "error")
+        }
         if(event.includes("Cannot read property 'username' of null")){
             document.getElementById("name").textContent = "INVALID TOKEN - RESTART REQUIRED"
         }else if(event.includes("bot is not defined")){
             document.getElementById("name").textContent = "INVALID TOKEN! - RESTART REQUIRED"
         }
     },
-    errorCheck: function(event, source, lineno, colno, error){
+    errorCheck: function(){
         window.onerror = function(event, source, lineno, colno, error) {
-            tools.errorCheckContent()
+            tools.errorCheckContent(event, source, lineno, colno, error)
         }
     },
     scrollToBottom: function (id) {
@@ -70,16 +74,6 @@ module.exports = {
         $('#' + id).animate({
             scrollTop: 0
         }, 500);
-    },
-    createBot: function (token){
-        document.getElementById("loaded").textContent = "const Discord = require('discord.js');const bot = new Discord.Client();tools.sendError();"
-        tools.output("Creating bot...", "log")
-        bot.login(token)   
-            .then(function(){
-                tools.output("Token Monitor Active — Bot logged in!", "log")
-                document.getElementById("name").textContent = bot.user.username
-                monitorDiscord.monitor("Token Monitor")
-            });
     },
     sendError: function(){
         window.onerror = function(event, source, lineno, colno, error) {
